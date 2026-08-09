@@ -13,6 +13,10 @@ namespace StudentManagementAPI.Services
         {
             _context = context;
         }
+        public async Task<List<Student>> GetAllStudents()
+        {
+            return await _context.Students.ToListAsync();
+        }
         public Task<Student> CreateStudent(Student student)
         {
             throw new NotImplementedException();
@@ -28,10 +32,6 @@ namespace StudentManagementAPI.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<Student>> GetAllStudents()
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<Student?> UpdateStudent(Student student, int id)
         {
