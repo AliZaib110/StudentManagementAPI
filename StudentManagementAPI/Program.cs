@@ -1,9 +1,12 @@
 using Microsoft.EntityFrameworkCore;
 using StudentManagementAPI.Data;
+using StudentManagementAPI.Services;
+using StudentManagementAPI.Interfaces;
 var builder = WebApplication.CreateBuilder(args);
 
 
 // Add services to the container.
+
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -14,6 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IStudentService, StudentService>();
 // swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

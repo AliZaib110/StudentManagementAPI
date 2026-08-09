@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentManagementAPI.Data;
 using StudentManagementAPI.DTOs;
+using StudentManagementAPI.Interfaces;
 using StudentManagementAPI.Models;
 
 namespace StudentManagementAPI.Controllers;
@@ -12,11 +13,18 @@ namespace StudentManagementAPI.Controllers;
 
 public class StudentsController : ControllerBase
 {
-    private readonly ApplicationDbContext _context;  // Dependency Injection
+    //private readonly ApplicationDbContext _context;  // Dependency Injection
 
-    public StudentsController(ApplicationDbContext context)  // constructor
+    //public StudentsController(ApplicationDbContext context)  // constructor
+    //{
+    //    _context = context;
+    //}
+
+
+    private readonly IStudentService _studentService;
+    public StudentsController(IStudentService studentService)
     {
-        _context = context;
+        _studentService = studentService;
     }
 
     // CRUD 1 : GET ALL Students
@@ -24,7 +32,8 @@ public class StudentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetStudents()
     {
-        var students = await _context.Students.ToListAsync();
+        //var students = await _context.Students.ToListAsync();
+        var students = await _studentService.GetAllStudents();
         return Ok(students);
     }
 
@@ -33,7 +42,7 @@ public class StudentsController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetStudent(int id)
     {
-        var student = await _context.Students.FindAsync(id);
+        var student = await _studentService.GetStudent(id);
         if (student == null)
         {
             return NotFound();
