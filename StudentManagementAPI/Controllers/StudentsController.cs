@@ -1,7 +1,6 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using StudentManagementAPI.Data;
+//using Microsoft.EntityFrameworkCore;
 using StudentManagementAPI.DTOs;
 using StudentManagementAPI.Interfaces;
 using StudentManagementAPI.Models;
@@ -65,12 +64,14 @@ public class StudentsController : ControllerBase
             Address = dto.Address
 
         };
-        _context.Students.Add(student);
-        await _context.SaveChangesAsync();
+
+        var createStudent = await _studentService.CreateStudent(student);
+
         return CreatedAtAction(
-            nameof(GetStudent),
-            new { id = student.Id },
-            student);
+            nameof(CreateStudent),
+            new { id = createStudent.Id },
+            createStudent);
+
     }
 
     //CRUD 4 — Update Student
@@ -78,31 +79,35 @@ public class StudentsController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateStudent(int id, Student student)
     {
-        if(id != student.Id)
+        if (id != student.Id)
         {
             return BadRequest();
         }
 
-        _context.Entry(student).State = EntityState.Modified;
-        await _context.SaveChangesAsync();
+        var updateStudent = await _studentService.UpdateStudent(student, id);
+
+        if (updateStudent == null)
+        {
+            return NotFound();
+        }
         return NoContent();
     }
-    
+
     // CRUD 5 : Delete Student
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteStudent(int id)
     {
-        var student = await _context.Students.FindAsync(id);
-        if(student == null)
+
+        var deleteStudent = await _studentService.DeleteStudent(id);
+
+        if (!deleteStudent)
         {
             return NotFound();
         }
 
-        _context.Students.Remove(student);
-
-        await _context.SaveChangesAsync();
         return NoContent();
+
     }
 
 

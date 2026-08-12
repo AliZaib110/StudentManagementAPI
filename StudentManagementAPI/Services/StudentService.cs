@@ -2,6 +2,7 @@
 using StudentManagementAPI.Data;
 using StudentManagementAPI.Interfaces;
 using StudentManagementAPI.Models;
+using System.Runtime.InteropServices;
 
 namespace StudentManagementAPI.Services
 {
@@ -13,29 +14,66 @@ namespace StudentManagementAPI.Services
         {
             _context = context;
         }
+
+        // GET All Students
         public async Task<List<Student>> GetAllStudents()
         {
             return await _context.Students.ToListAsync();
         }
-        public Task<Student> CreateStudent(Student student)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<bool> DeleteStudent(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<Student?> GetStudent(int id)
+
+        // Get Student by Id
+        public async Task<Student?> GetStudent(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Students.FindAsync(id);
         }
 
 
-        public Task<Student?> UpdateStudent(Student student, int id)
+
+        //Create New Student 
+        public async Task<Student> CreateStudent(Student student)
         {
-            throw new NotImplementedException();
+            _context.Students.Add(student);
+            await _context.SaveChangesAsync();
+            return student;
         }
+
+
+        // Update Existing Student
+        public async Task<Student?> UpdateStudent(Student student, int id)
+        {
+            var existingStudent = await _context.Students.FindAsync(id);
+            if (existingStudent == null)
+            {
+                return null;
+            }
+
+            existingStudent.Name = student.Name;
+            existingStudent.Email = student.Email;
+            existingStudent.Age = student.Age;
+            existingStudent.Course = student.Course;
+            existingStudent.Address = student.Address;
+
+            await _context.SaveChangesAsync();
+            return existingStudent;
+
+        }
+
+
+        //Delete Student
+        public async Task<bool> DeleteStudent(int id)
+        {
+            var delStudent = await _context.Students.FindAsync(id);
+            if(delStudent == null)
+            {
+                return false;
+            }
+
+            _context.Students.Remove(delStudent);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
     }
 }
