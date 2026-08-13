@@ -13,14 +13,15 @@ namespace StudentManagementAPI.DTOs
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        [Range(1, 100)]
+        [Range(18, 100)]
         public int Age { get; set; }
 
         [Required]
+        [StringLength (100)]
         public string Course { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(200)]
+        [StringLength(250)]
         public string Address { get; set; } = string.Empty;
 
 
