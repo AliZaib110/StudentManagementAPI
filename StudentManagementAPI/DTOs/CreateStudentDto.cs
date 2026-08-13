@@ -20,7 +20,7 @@ namespace StudentManagementAPI.DTOs
         public string Course { get; set; } = string.Empty;
 
         [Required]
-        [StringLength(200)]
+        [StringLength(250)]
         public string Address { get; set; } = string.Empty;
 
 
